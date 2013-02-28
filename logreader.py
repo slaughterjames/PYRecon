@@ -50,7 +50,7 @@ class logreader:
 
     '''
     ConfRead()
-    Function: - Reads in the config file
+    Function: - Reads in the pyrecon.conf config file
        
     '''
     def ConfRead(self, debug):
@@ -77,6 +77,7 @@ class logreader:
     '''
     LogRead()
     Function: - Reads in the /var/log/auth.log file
+              - Looks for two specific lines from which to pull a suspect IP address
        
     '''
     def LogRead(self, debug):
@@ -104,4 +105,3 @@ class logreader:
                     print ''                            
 
         return 0
-

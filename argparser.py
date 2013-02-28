@@ -48,14 +48,14 @@ class argparser:
         self.nmap_output_data = ''
         self.wget_output_data = ''
         self.wgetSSL_output_data = ''
+        self.wgetTomcat_output_data = ''
         self.debug = False
         
         
     '''       
     Parse()
     Function: - Determines if all required arguments are present
-              - Populates the required variables and determines the protocol if not specified
-              - returns to calling fuzzer 
+              - Populates the required variables               
     '''    
     def Parse(self, args):        
         option = ' '
