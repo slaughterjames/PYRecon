@@ -286,7 +286,8 @@ if __name__ == '__main__':
                     if (AP.supressemail == False): 
                         Email(current_IP, logdir)
                 else:
-                    print current_IP + ': IP has previously been dealt with'
+                    if (AP.debug == True):
+                        print current_IP + ': IP has previously been dealt with'
                     
                 AP.whois_output_data = ''
                 AP.nmap_output_data = ''
@@ -308,7 +309,8 @@ if __name__ == '__main__':
                 if (AP.supressemail == False):
                     Email(AP.target, logdir)
             else:
-                print AP.target + ': IP has previously been dealt with'
+                if (AP.debug == True):
+                    print AP.target + ': IP has previously been dealt with'
 
         if ret == 1:
             Terminate(-1)
