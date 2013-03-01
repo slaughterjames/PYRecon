@@ -1,5 +1,5 @@
 PYRecon v0.1 - Copyright 2013 James Slaughter,
-This file is part of Recon v0.1.
+This file is part of PYRecon v0.1.
 
 PYRecon v0.1 is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
