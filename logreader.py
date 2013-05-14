@@ -1,34 +1,20 @@
 '''
-<<<<<<< HEAD
 PYRecon v0.2 - Copyright 2013 James Slaughter,
-This file is part of PYRecon v0.2.
-
-PYRecon v0.2 is free software: you can redistribute it and/or modify
-=======
-PYRecon v0.1 - Copyright 2013 James Slaughter,
 This file is part of PYRecon v0.1.
 
-PYRecon v0.1 is free software: you can redistribute it and/or modify
->>>>>>> a04bcb90085fb75e6b1d1f11903aaa5acee329a9
+PYRecon v0.2 is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-<<<<<<< HEAD
+
 PYRecon v0.2 is distributed in the hope that it will be useful,
-=======
-PYRecon v0.1 is distributed in the hope that it will be useful,
->>>>>>> a04bcb90085fb75e6b1d1f11903aaa5acee329a9
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-<<<<<<< HEAD
 along with PYRecon v0.2.  If not, see <http://www.gnu.org/licenses/>.
-=======
-along with PYRecon v0.1.  If not, see <http://www.gnu.org/licenses/>.
->>>>>>> a04bcb90085fb75e6b1d1f11903aaa5acee329a9
 '''
 
 
@@ -115,7 +101,7 @@ class logreader:
                     self.data += line[intFromVal2:intLen]
                     if (debug == True):
                         print 'IP: ' + self.data
-<<<<<<< HEAD
+
             elif (line.find('error: connect_to') != -1):
                 intFromVal1 = line.find('_to')
                 if (intFromVal1 != -1):
@@ -124,8 +110,6 @@ class logreader:
                     self.data += line[intFromVal2:intLen-17]
                     if (debug == True):
                         print 'IP: ' + self.data
-=======
->>>>>>> a04bcb90085fb75e6b1d1f11903aaa5acee329a9
             else:
                 if (debug == True):
                     print ''                            
