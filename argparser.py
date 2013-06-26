@@ -84,11 +84,11 @@ class argparser:
 
                 if option == 'supresswget':
                     self.supresswget = True
-                    print option + ': ' + self.supresswget
+                    print option + ': ' + str(self.supresswget)
 
                 if option == 'supressemail':
                     self.supressemail = True
-                    print option + ': ' + self.supressemail
+                    print option + ': ' + str(self.supressemail)
 
                 if option == 'debug':
                     self.debug = True
