@@ -1,20 +1,20 @@
 '''
-PYRecon v0.3 - Copyright 2014 James Slaughter,
-This file is part of PYRecon v0.3.
+PYRecon v0.4 - Copyright 2014 James Slaughter,
+This file is part of PYRecon v0.4.
 
-PYRecon v0.3 is free software: you can redistribute it and/or modify
+PYRecon v0.4 is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
 
-PYRecon v0.3 is distributed in the hope that it will be useful,
+PYRecon v0.4 is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with PYRecon v0.3.  If not, see <http://www.gnu.org/licenses/>.
+along with PYRecon v0.4.  If not, see <http://www.gnu.org/licenses/>.
 ''' 
 
 '''
@@ -49,6 +49,7 @@ class argparser:
         self.nmap_output_data = ''
         self.nmap_filename = ''
         self.wget_output_data = ''
+        self.useragent = ''
         self.debug = False
         
         

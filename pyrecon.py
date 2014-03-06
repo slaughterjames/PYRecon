@@ -1,21 +1,21 @@
 #!/usr/bin/python
 '''
-PYRecon v0.3 - Copyright 2014 James Slaughter,
-This file is part of PYRecon v0.3.
+PYRecon v0.4 - Copyright 2014 James Slaughter,
+This file is part of PYRecon v0.4.
 
-PYRecon v0.3 is free software: you can redistribute it and/or modify
+PYRecon v0.4 is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
 
-PYRecon v0.3 is distributed in the hope that it will be useful,
+PYRecon v0.4 is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with PYRecon v0.3.  If not, see <http://www.gnu.org/licenses/>.
+along with PYRecon v0.4.  If not, see <http://www.gnu.org/licenses/>.
  
 '''
 
@@ -122,32 +122,55 @@ def WGet(target, logdir):
              print 'Port: ' + str(port) + '\n'
      
         filename = logdir + 'index_port' + str(port) + '.html'
+        log = logdir + 'index_port' + str(port) + '.log'
 
-        if (AP.debug == True):
-            print 'WGet: target: ' + target + ' port ' + str(port)
+        if (AP.useragent != 'default'):
 
-        #WGet flags: --tries=1 Limit tries to a host connection to 1.
-        #            -S Show the original server headers.
-        #            --no-check-certificate Will not balk when a site's certificate doesn't match the target domain.
-        #            --save-headers Save the server headers for investigation.
-        #            -O output to given filename.
-
-        subproc = subprocess.Popen('wget --tries=1 -S --no-check-certificate --save-headers -O ' + filename + ' ' + target + ':' + str(port), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        for wget_data in subproc.stdout.readlines():
-            AP.wget_output_data += wget_data
             if (AP.debug == True):
-                print wget_data
+                print 'WGet: target: ' + target + ' port ' + str(port)
+                print 'wget --user-agent=' + AP.useragent + ' --tries=1 -S --no-check-certificate --save-headers -O ' + filename + ' ' + target + ':' + str(port)
+
+            #WGet flags: --tries=1 Limit tries to a host connection to 1.
+            #            -S Show the original server headers.
+            #            --user-agent Will identify as a browser agent and not WGet
+            #            --no-check-certificate Will not balk when a site's certificate doesn't match the target domain.
+            #            --save-headers Save the server headers for investigation.
+            #            -O output to given filename.
+
+            subproc = subprocess.Popen('wget --user-agent=' + AP.useragent + ' --tries=1 -S --no-check-certificate --save-headers -O ' + filename + ' ' + target + ':' + str(port), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            for wget_data in subproc.stdout.readlines():
+                AP.wget_output_data += wget_data
+                if (AP.debug == True):
+                    print wget_data
+
+        else:
+            if (AP.debug == True):
+                print 'WGet: target: ' + target + ' port ' + str(port)
+
+            #WGet flags: --tries=1 Limit tries to a host connection to 1.
+            #            -S Show the original server headers.
+            #            --no-check-certificate Will not balk when a site's certificate doesn't match the target domain.
+            #            --save-headers Save the server headers for investigation.
+            #            -O output to given filename.
+
+            subproc = subprocess.Popen('wget --tries=1 -S --no-check-certificate --save-headers -O ' + filename + ' ' + target + ':' + str(port), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            for wget_data in subproc.stdout.readlines():
+                AP.wget_output_data += wget_data
+                if (AP.debug == True):
+                    print wget_data            
+
 
         filename = ''
 
         wget_data = ''
 
 
+
 '''
 Email()
 Function: Send an Email summarizing the events 
 '''
-def Email(target, logdir):
+def Email(target, logdir, line):
     FI = fileio()
     filename = logdir + 'Msg.txt'
     
@@ -169,6 +192,10 @@ def Email(target, logdir):
     email_output_data += 'PYRecon has reviewed IP: ' + target + '\n'
     email_output_data += '\n'
     email_output_data += 'The results are as follows: \n'
+    email_output_data += '\n'
+    email_output_data += 'Event Trigger\n'
+    email_output_data += '---------\n'
+    email_output_data += line
     email_output_data += '\n'
     email_output_data += 'Whois\n'
     email_output_data += '---------\n'
@@ -219,6 +246,7 @@ if __name__ == '__main__':
         AP.logdir = LG.logdir
         AP.emailrecp = LG.emailrecp
         AP.emailsend = LG.emailsend
+        AP.useragent = LG.useragent
         
         if (len(LG.logdir) < 4):
             print 'The log directory has not been configured.  Please edit the pyrecon.conf file before continuing.'
@@ -256,10 +284,12 @@ if __name__ == '__main__':
         if (AP.mode == 'auto'):            
             LogProcess()
             IP = LG.data.split()
+            LOGLINE = LG.log_line.split('*')
+            counter = 0
             for current_IP in IP:
-                logdir = AP.logdir + current_IP + '/'
+                logdir = AP.logdir + LG.date + '/' + current_IP + '/'
                 if (AP.debug == True):
-                    print 'logdir: ' + AP.logdir + current_IP
+                    print 'logdir: ' + LG.date + '/' + AP.logdir + current_IP
                     print ''
                 if not os.path.exists(logdir):
                     os.makedirs(logdir)
@@ -269,7 +299,7 @@ if __name__ == '__main__':
                     if (AP.supresswget == False): 
                         WGet(current_IP, logdir)
                     if (AP.supressemail == False): 
-                        Email(current_IP, logdir)
+                        Email(current_IP, logdir, LOGLINE[counter])
                 else:
                     if (AP.debug == True):
                         print current_IP + ': IP has previously been dealt with'
@@ -277,13 +307,12 @@ if __name__ == '__main__':
                 AP.whois_output_data = ''
                 AP.nmap_output_data = ''
                 AP.wget_output_data = ''
-                AP.wgetSSL_output_data = ''
-                AP.wgetTomcat_output_data = ''
+                counter += 1
         
         if ((AP.mode == 'manual') or (AP.mode == 'fail2ban')):
-            logdir = AP.logdir + AP.target + '/'
+            logdir = AP.logdir + LG.date + '/' + AP.target + '/'
             if (AP.debug == True):
-                print 'logdir: ' + AP.logdir + AP.target
+                print 'logdir: ' + AP.logdir + LG.date + '/' + AP.target
                 print ''            
             if not os.path.exists(logdir):
                 os.makedirs(logdir)

@@ -1,20 +1,20 @@
 '''
-PYRecon v0.4 - Copyright 2014 James Slaughter,
-This file is part of PYRecon v0.4.
+PYRecon v0.3 - Copyright 2014 James Slaughter,
+This file is part of PYRecon v0.3.
 
-PYRecon v0.4 is free software: you can redistribute it and/or modify
+PYRecon v0.3 is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
 
-PYRecon v0.4 is distributed in the hope that it will be useful,
+PYRecon v0.3 is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with PYRecon v0.4.  If not, see <http://www.gnu.org/licenses/>.
+along with PYRecon v0.3.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
 
@@ -26,8 +26,6 @@ the /var/log/auth.log file
 
 #No python imports
 from array import *
-import time
-import datetime
 
 #Programmer generated imports
 from fileio import fileio
@@ -50,11 +48,8 @@ class logreader:
         self.emailsend = ''
         self.filename = '/var/log/auth.log'
         self.confname = '/etc/pyrecon/pyrecon.conf'
-        self.date = ''
-        self.date_abbr = ''
         self.data = ''
         self.log_line = ''
-        self.useragent = ''
         self.http_data = array('i')
         self.https_data = array('i')
 
@@ -76,8 +71,6 @@ class logreader:
                 self.emailrecp = line[10:intLen]
             elif (line.find('emailsend') != -1):
                 self.emailsend = line[10:intLen]
-            elif (line.find('useragent') != -1):
-                self.useragent = line[10:intLen]
             else:
                 if (debug == True): 
                     print ''
@@ -141,39 +134,27 @@ class logreader:
     def LogRead(self, debug):
         FLog = fileio()
         FLog.ReadFile(self.filename)
-        DayVal = int(datetime.datetime.now().strftime("%d"))
-        self.date = datetime.datetime.now().strftime("%Y-%m-%d")
-        if (DayVal < 10):
-            self.date_abbr = datetime.datetime.now().strftime("%b %d").lstrip("0").replace(" 0", "  ")
-        else:
-            self.date_abbr = datetime.datetime.now().strftime("%b %d").lstrip("0").replace(" 0", " ")
-        if (debug == True):
-            print 'self.date: ' + self.date
-            print 'self.date_abbr: ' + self.date_abbr
         for line in FLog.fileobject:
-            if (line.find(self.date_abbr) != -1):
-                if (line.find('Bad protocol version identification') != -1):
-                    intFromVal1 = line.find('from')
-                    if (intFromVal1 != -1):
-                        intLen = len(line)
-                        intFromVal2 = intFromVal1 + 5
-                        self.data += line[intFromVal2:intLen]
-                        self.log_line += line + '*'
-                        if (debug == True):
-                            print 'IP: ' + self.data
-                            print 'Log line: ' + self.log_line
-                elif (line.find('Did not receive identification string') != -1):
-                    intFromVal1 = line.find('from')
-                    if (intFromVal1 != -1):
-                        intLen = len(line)
-                        intFromVal2 = intFromVal1 + 5
-                        self.data += line[intFromVal2:intLen]
-                        self.log_line += line + '*'
-                        if (debug == True):
-                            print 'IP: ' + self.data
-                            print 'Log line: ' + self.log_line
-                else:
+            if (line.find('Bad protocol version identification') != -1):
+                intFromVal1 = line.find('from')
+                if (intFromVal1 != -1):
+                    intLen = len(line)
+                    intFromVal2 = intFromVal1 + 5
+                    self.data += line[intFromVal2:intLen]
+                    self.log_line += line
                     if (debug == True):
-                        print ''                            
+                        print 'IP: ' + self.data
+            elif (line.find('Did not receive identification string') != -1):
+                intFromVal1 = line.find('from')
+                if (intFromVal1 != -1):
+                    intLen = len(line)
+                    intFromVal2 = intFromVal1 + 5
+                    self.data += line[intFromVal2:intLen]
+                    self.log_line += line
+                    if (debug == True):
+                        print 'IP: ' + self.data
+            else:
+                if (debug == True):
+                    print ''                            
 
         return 0
