@@ -124,10 +124,24 @@ def WGet(target, logdir):
         filename = logdir + 'index_port' + str(port) + '.html'
         log = logdir + 'index_port' + str(port) + '.log'
 
-        if (AP.useragent != 'default'):
-
+        if (AP.useragent.find('default') != -1 ):
             if (AP.debug == True):
-                print 'WGet: target: ' + target + ' port ' + str(port)
+                print 'wget --tries=1 -S --no-check-certificate --save-headers -O ' + filename + ' ' + target + ':' + str(port)
+
+            #WGet flags: --tries=1 Limit tries to a host connection to 1.
+            #            -S Show the original server headers.
+            #            --no-check-certificate Will not balk when a site's certificate doesn't match the target domain.
+            #            --save-headers Save the server headers for investigation.
+            #            -O output to given filename.
+
+            subproc = subprocess.Popen('wget --tries=1 -S --no-check-certificate --save-headers -O ' + filename + ' ' + target + ':' + str(port), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            for wget_data in subproc.stdout.readlines():
+                AP.wget_output_data += wget_data
+                if (AP.debug == True):
+                    print wget_data
+
+        else:
+            if (AP.debug == True):                
                 print 'wget --user-agent=' + AP.useragent + ' --tries=1 -S --no-check-certificate --save-headers -O ' + filename + ' ' + target + ':' + str(port)
 
             #WGet flags: --tries=1 Limit tries to a host connection to 1.
@@ -142,29 +156,11 @@ def WGet(target, logdir):
                 AP.wget_output_data += wget_data
                 if (AP.debug == True):
                     print wget_data
-
-        else:
-            if (AP.debug == True):
-                print 'WGet: target: ' + target + ' port ' + str(port)
-
-            #WGet flags: --tries=1 Limit tries to a host connection to 1.
-            #            -S Show the original server headers.
-            #            --no-check-certificate Will not balk when a site's certificate doesn't match the target domain.
-            #            --save-headers Save the server headers for investigation.
-            #            -O output to given filename.
-
-            subproc = subprocess.Popen('wget --tries=1 -S --no-check-certificate --save-headers -O ' + filename + ' ' + target + ':' + str(port), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            for wget_data in subproc.stdout.readlines():
-                AP.wget_output_data += wget_data
-                if (AP.debug == True):
-                    print wget_data            
-
+        
 
         filename = ''
 
         wget_data = ''
-
-
 
 '''
 Email()
