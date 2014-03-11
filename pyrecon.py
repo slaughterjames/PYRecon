@@ -208,7 +208,7 @@ def Email(target, logdir, line):
     
     FI.WriteFile(filename, email_output_data)
 
-    subproc = subprocess.Popen('ssmtp ' + AP.emailrecp + ' < ' + filename, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    subproc = subprocess.Popen('/usr/sbin/ssmtp ' + AP.emailrecp + ' < ' + filename, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     for email_data in subproc.stdout.readlines():
         if (AP.debug == True):
             print email_data
@@ -317,7 +317,7 @@ if __name__ == '__main__':
                 if (AP.supresswget == False):
                     WGet(AP.target, logdir)
                 if (AP.supressemail == False):
-                    Email(AP.target, logdir)
+                    Email(AP.target, logdir, LOGLINE[counter])
             else:
                 if (AP.debug == True):
                     print AP.target + ': IP has previously been dealt with'

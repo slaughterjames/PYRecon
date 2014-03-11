@@ -66,6 +66,17 @@ class logreader:
     def ConfRead(self, debug):
         FConf = fileio()
         FConf.ReadFile(self.confname)
+        DayVal = int(datetime.datetime.now().strftime("%d"))
+        self.date = datetime.datetime.now().strftime("%Y-%m-%d")
+
+        if (DayVal < 10):
+            self.date_abbr = datetime.datetime.now().strftime("%b %d").lstrip("0").replace(" 0", "  ")
+        else:
+            self.date_abbr = datetime.datetime.now().strftime("%b %d").lstrip("0").replace(" 0", " ")
+        if (debug == True):
+            print 'self.date: ' + self.date
+            print 'self.date_abbr: ' + self.date_abbr
+
         for line in FConf.fileobject:
             if (debug == True):
                 print line
@@ -141,15 +152,7 @@ class logreader:
     def LogRead(self, debug):
         FLog = fileio()
         FLog.ReadFile(self.filename)
-        DayVal = int(datetime.datetime.now().strftime("%d"))
-        self.date = datetime.datetime.now().strftime("%Y-%m-%d")
-        if (DayVal < 10):
-            self.date_abbr = datetime.datetime.now().strftime("%b %d").lstrip("0").replace(" 0", "  ")
-        else:
-            self.date_abbr = datetime.datetime.now().strftime("%b %d").lstrip("0").replace(" 0", " ")
-        if (debug == True):
-            print 'self.date: ' + self.date
-            print 'self.date_abbr: ' + self.date_abbr
+
         for line in FLog.fileobject:
             if (line.find(self.date_abbr) != -1):
                 if (line.find('Bad protocol version identification') != -1):
