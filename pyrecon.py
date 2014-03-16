@@ -306,6 +306,10 @@ if __name__ == '__main__':
                 counter += 1
         
         if ((AP.mode == 'manual') or (AP.mode == 'fail2ban')):
+            LogProcess()
+            IP = LG.data.split()
+            LOGLINE = LG.log_line.split('*')
+            counter = 0
             logdir = AP.logdir + LG.date + '/' + AP.target + '/'
             if (AP.debug == True):
                 print 'logdir: ' + AP.logdir + LG.date + '/' + AP.target
